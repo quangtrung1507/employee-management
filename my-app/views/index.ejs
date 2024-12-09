@@ -9,24 +9,24 @@
 <body>
   <h1>Quản lý Nhân Viên</h1>
   
-  <!-- Form thêm hóa đơn -->
-  <form action="/invoices" method="POST" enctype="multipart/form-data">
-    <label for="customerName">Tên nhân viên:</label>
-    <input type="text" id="customerName" name="customerName" required><br><br>
+  <!-- Form thêm nhân viên -->
+  <form action="/employees" method="POST" enctype="multipart/form-data">
+    <label for="name">Tên nhân viên:</label>
+    <input type="text" id="name" name="name" required><br><br>
     
-    <label for="item">Email:</label>
-    <input type="text" id="item" name="item" required><br><br>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required><br><br>
     
-    <label for="quantity">Tuổi:</label>
-    <input type="number" id="quantity" name="quantity" required><br><br>
+    <label for="age">Tuổi:</label>
+    <input type="number" id="age" name="age" required><br><br>
     
-    <label for="price">Lương:</label>
-    <input type="number" id="price" name="price" required><br><br>
+    <label for="salary">Lương:</label>
+    <input type="number" id="salary" name="salary" required><br><br>
     
-    <label for="productImage">Hình ảnh:</label>
-    <input type="file" id="productImage" name="productImage" accept="image/*" required><br><br>
+    <label for="profileImage">Hình ảnh:</label>
+    <input type="file" id="profileImage" name="profileImage" accept="image/*" required><br><br>
 
-    <button type="submit">Tạo nhân viên</button>
+    <button type="submit">Thêm nhân viên</button>
   </form>
   
   <h2>Danh sách Nhân Viên</h2>
@@ -38,32 +38,30 @@
         <th>Tuổi</th>
         <th>Lương</th>
         <th>Hình ảnh</th>
-        <th>Ngày</th>
         <th>Thao tác</th>
       </tr>
     </thead>
     <tbody>
-      <% invoices.forEach(invoice => { %>
+      <% employees.forEach(employee => { %>
         <tr>
-          <td><%= invoice.customerName %></td>
-          <td><%= invoice.item %></td>
-          <td><%= invoice.quantity %></td>
-          <td><%= invoice.price %></td>
+          <td><%= employee.name %></td>
+          <td><%= employee.email %></td>
+          <td><%= employee.age %></td>
+          <td><%= employee.salary %></td>
           <td>
-            <% if (invoice.productImage) { %>
-              <img src="<%= invoice.productImage %>" alt="Hình sản phẩm" width="100">
+            <% if (employee.profileImage) { %>
+              <img src="<%= employee.profileImage %>" alt="Hình nhân viên" width="100">
             <% } else { %>
               Không có hình ảnh
             <% } %>
           </td>
-          <td><%= new Date(invoice._id.getTimestamp()).toLocaleDateString() %></td>
           <td>
-            <a href="/invoices/<%= invoice._id %>/edit">Sửa</a> |
-            <a href="/invoices/<%= invoice._id %>/delete" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</a>
+            <a href="/employees/<%= employee._id %>/edit">Sửa</a> |
+            <a href="/employees/<%= employee._id %>/delete" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</a>
           </td>
         </tr>
       <% }) %>
     </tbody>
-  </table>  
+  </table>
 </body>
 </html>

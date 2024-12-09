@@ -8,22 +8,21 @@
 </head>
 <body>
   <h1>Sửa thông tin nhân viên</h1>
-  <form action="/invoices/<%= invoice._id %>" method="POST" enctype="multipart/form-data">
-    <input type="hidden" name="_method" value="PUT">
-    <label for="customerName">Tên nhân viên:</label>
-    <input type="text" id="customerName" name="customerName" value="<%= invoice.customerName %>" required><br><br>
+  <form action="/employees/<%= employee._id %>" method="POST" enctype="multipart/form-data">
+    <label for="name">Tên nhân viên:</label>
+    <input type="text" id="name" name="name" value="<%= employee.name %>" required><br><br>
     
-    <label for="item">Email:</label>
-    <input type="text" id="item" name="item" value="<%= invoice.item %>" required><br><br>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" value="<%= employee.email %>" required><br><br>
     
-    <label for="quantity">Tuổi:</label>
-    <input type="number" id="quantity" name="quantity" value="<%= invoice.quantity %>" required><br><br>
+    <label for="age">Tuổi:</label>
+    <input type="number" id="age" name="age" value="<%= employee.age %>" required><br><br>
     
-    <label for="price">Lương:</label>
-    <input type="number" id="price" name="price" value="<%= invoice.price %>" required><br><br>
+    <label for="salary">Lương:</label>
+    <input type="number" id="salary" name="salary" value="<%= employee.salary %>" required><br><br>
     
-    <label for="productImage">Hình ảnh nhân viên (nếu cần thay đổi):</label>
-    <input type="file" id="productImage" name="productImage"><br><br>
+    <label for="profileImage">Hình ảnh nhân viên (nếu cần thay đổi):</label>
+    <input type="file" id="profileImage" name="profileImage"><br><br>
   
     <button type="submit">Lưu thay đổi</button>
   </form>  

@@ -3,138 +3,126 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs'); // Để kiểm tra và tạo thư mục
-const Invoice = require('./models/Invoice');
+const fs = require('fs');
+const Employee = require('./models/Employee'); // Đảm bảo file này tồn tại
 
 const app = express();
 const PORT = 3000;
 
-// Đảm bảo thư mục uploads tồn tại
+// Tạo thư mục lưu trữ nếu chưa tồn tại
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
-//
-//const path = require('path');
 
-// Middleware phục vụ file tĩnh
+// Middleware và cấu hình
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Cấu hình EJS làm công cụ template
+app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Middleware
-//app.use(bodyParser.json());
-//app.use(bodyParser.urlencoded({ extended: true }));
-
-// Cấu hình Multer để lưu ảnh vào thư mục "uploads"
+// Cấu hình Multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, uploadDir); // Thư mục lưu file
+    cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname); // Tên file duy nhất
+    cb(null, Date.now() + '-' + file.originalname);
   },
 });
 const upload = multer({ storage });
-
-// Để phục vụ file tĩnh từ thư mục "uploads"
 app.use('/uploads', express.static(uploadDir));
 
 // Kết nối MongoDB
-const uri =
-  'mongodb+srv://nguyenquangtrung150704:trung.150704@cluster0.nfe6m.mongodb.net/mydatabase?retryWrites=true&w=majority';
 mongoose
-  .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Kết nối thành công tới MongoDB Atlas'))
-  .catch((err) => console.log('Lỗi kết nối:', err));
+  .connect('mongodb+srv://nguyenquangtrung150704:trung.150704@cluster0.nfe6m.mongodb.net/mydatabase?retryWrites=true&w=majority', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log('Connected to MongoDB'))
+  .catch((err) => console.error('Connection error:', err));
 
-// Route mặc định cho trang chủ
+// Routes chính
 app.get('/', async (req, res) => {
   try {
-    const invoices = await Invoice.find();
-    res.render('index', { invoices });
+    const employees = await Employee.find();
+    res.render('index', { employees });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Thêm hóa đơn mới (với upload file)
-app.post('/invoices', upload.single('productImage'), async (req, res) => {
-  const { customerName, item, quantity, price } = req.body;
-
-  if (!customerName || !item || !quantity || !price) {
-    return res.status(400).json({ error: 'Tất cả các trường đều bắt buộc.' });
-  }
-
+app.post('/employees', upload.single('profileImage'), async (req, res) => {
+  const { name, email, age, salary } = req.body;
   try {
-    const newInvoice = new Invoice({
-      customerName,
-      item,
-      quantity: parseInt(quantity),
-      price: parseFloat(price),
-      productImage: req.file ? `/uploads/${req.file.filename}` : null,
+    const newEmployee = new Employee({
+      name,
+      email,
+      age: parseInt(age),
+      salary: parseFloat(salary),
+      profileImage: req.file ? `/uploads/${req.file.filename}` : null,
     });
-
-    await newInvoice.save();
+    await newEmployee.save();
     res.redirect('/');
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Sửa hóa đơn (hiển thị giao diện chỉnh sửa)
-app.get('/invoices/:id/edit', async (req, res) => {
+app.get('/employees/:id/edit', async (req, res) => {
   try {
-    const invoice = await Invoice.findById(req.params.id);
-    res.render('edit', { invoice });
+    const employee = await Employee.findById(req.params.id);
+    res.render('edit', { employee });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Cập nhật hóa đơn
-app.post('/invoices/:id', upload.single('productImage'), async (req, res) => {
-  const { customerName, item, quantity, price } = req.body;
+app.post('/employees/:id', upload.single('profileImage'), async (req, res) => {
+  const { name, email, age, salary } = req.body;
 
   const updateData = {
-    customerName,
-    item,
-    quantity: parseInt(quantity),
-    price: parseFloat(price),
+    name,
+    email,
+    age: parseInt(age),
+    salary: parseFloat(salary),
   };
 
   if (req.file) {
-    updateData.productImage = `/uploads/${req.file.filename}`;
+    updateData.profileImage = `/uploads/${req.file.filename}`;
   }
 
   try {
-    await Invoice.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    await Employee.findByIdAndUpdate(req.params.id, updateData, { new: true });
     res.redirect('/');
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Xóa hóa đơn
-app.get('/invoices/:id/delete', async (req, res) => {
+app.get('/employees/:id/delete', async (req, res) => {
   try {
-    const invoice = await Invoice.findById(req.params.id);
-    if (invoice.productImage) {
-      const filePath = path.join(__dirname, invoice.productImage);
+    const employee = await Employee.findById(req.params.id);
+    if (employee.profileImage) {
+      const filePath = path.join(__dirname, employee.profileImage);
       if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath); // Xóa file nếu tồn tại
+        fs.unlinkSync(filePath);
       }
     }
-    await Invoice.findByIdAndDelete(req.params.id);
+    await Employee.findByIdAndDelete(req.params.id);
     res.redirect('/');
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Khởi động server
+// Middleware xử lý lỗi
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something went wrong!');
+});
+
+// Start server
 app.listen(PORT, () => {
-  console.log(`Server chạy tại http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
