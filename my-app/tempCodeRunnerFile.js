@@ -1,0 +1,1 @@
+mongodb+srv://nguyenquangtrung150704:trung.150704@cluster0.nfe6m.mongodb.net/mydatabase?retryWrites=true&w=majority
