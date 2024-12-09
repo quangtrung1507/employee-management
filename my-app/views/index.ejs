@@ -3,40 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quản lý Hóa đơn</title>
+  <title>Quản lý Nhân Viên</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <h1>Quản lý Hóa đơn</h1>
+  <h1>Quản lý Nhân Viên</h1>
   
   <!-- Form thêm hóa đơn -->
   <form action="/invoices" method="POST" enctype="multipart/form-data">
-    <label for="customerName">Tên khách hàng:</label>
+    <label for="customerName">Tên nhân viên:</label>
     <input type="text" id="customerName" name="customerName" required><br><br>
     
-    <label for="item">Mặt hàng:</label>
+    <label for="item">Email:</label>
     <input type="text" id="item" name="item" required><br><br>
     
-    <label for="quantity">Số lượng:</label>
+    <label for="quantity">Tuổi:</label>
     <input type="number" id="quantity" name="quantity" required><br><br>
     
-    <label for="price">Giá:</label>
+    <label for="price">Lương:</label>
     <input type="number" id="price" name="price" required><br><br>
     
     <label for="productImage">Hình ảnh:</label>
     <input type="file" id="productImage" name="productImage" accept="image/*" required><br><br>
 
-    <button type="submit">Tạo hóa đơn</button>
+    <button type="submit">Tạo nhân viên</button>
   </form>
   
-  <h2>Danh sách Hóa đơn</h2>
+  <h2>Danh sách Nhân Viên</h2>
   <table border="1">
     <thead>
       <tr>
-        <th>Tên khách hàng</th>
-        <th>Sản phẩm</th>
-        <th>Số lượng</th>
-        <th>Giá</th>
+        <th>Tên nhân viên</th>
+        <th>Email</th>
+        <th>Tuổi</th>
+        <th>Lương</th>
         <th>Hình ảnh</th>
         <th>Ngày</th>
         <th>Thao tác</th>
