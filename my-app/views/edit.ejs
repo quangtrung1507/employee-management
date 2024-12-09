@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sửa Hóa đơn</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <h1>Sửa Hóa đơn</h1>
+  <form action="/invoices/<%= invoice._id %>" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="_method" value="PUT">
+    <label for="customerName">Tên khách hàng:</label>
+    <input type="text" id="customerName" name="customerName" value="<%= invoice.customerName %>" required><br><br>
+    
+    <label for="item">Mặt hàng:</label>
+    <input type="text" id="item" name="item" value="<%= invoice.item %>" required><br><br>
+    
+    <label for="quantity">Số lượng:</label>
+    <input type="number" id="quantity" name="quantity" value="<%= invoice.quantity %>" required><br><br>
+    
+    <label for="price">Giá:</label>
+    <input type="number" id="price" name="price" value="<%= invoice.price %>" required><br><br>
+    
+    <label for="productImage">Hình ảnh sản phẩm (nếu cần thay đổi):</label>
+    <input type="file" id="productImage" name="productImage"><br><br>
+  
+    <button type="submit">Lưu thay đổi</button>
+  </form>  
+</body>
+</html>

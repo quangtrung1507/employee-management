@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý Hóa đơn</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <h1>Quản lý Hóa đơn</h1>
+  
+  <!-- Form thêm hóa đơn -->
+  <form action="/invoices" method="POST" enctype="multipart/form-data">
+    <label for="customerName">Tên khách hàng:</label>
+    <input type="text" id="customerName" name="customerName" required><br><br>
+    
+    <label for="item">Mặt hàng:</label>
+    <input type="text" id="item" name="item" required><br><br>
+    
+    <label for="quantity">Số lượng:</label>
+    <input type="number" id="quantity" name="quantity" required><br><br>
+    
+    <label for="price">Giá:</label>
+    <input type="number" id="price" name="price" required><br><br>
+    
+    <label for="productImage">Hình ảnh:</label>
+    <input type="file" id="productImage" name="productImage" accept="image/*" required><br><br>
+
+    <button type="submit">Tạo hóa đơn</button>
+  </form>
+  
+  <h2>Danh sách Hóa đơn</h2>
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Tên khách hàng</th>
+        <th>Sản phẩm</th>
+        <th>Số lượng</th>
+        <th>Giá</th>
+        <th>Hình ảnh</th>
+        <th>Ngày</th>
+        <th>Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% invoices.forEach(invoice => { %>
+        <tr>
+          <td><%= invoice.customerName %></td>
+          <td><%= invoice.item %></td>
+          <td><%= invoice.quantity %></td>
+          <td><%= invoice.price %></td>
+          <td>
+            <% if (invoice.productImage) { %>
+              <img src="<%= invoice.productImage %>" alt="Hình sản phẩm" width="100">
+            <% } else { %>
+              Không có hình ảnh
+            <% } %>
+          </td>
+          <td><%= new Date(invoice._id.getTimestamp()).toLocaleDateString() %></td>
+          <td>
+            <a href="/invoices/<%= invoice._id %>/edit">Sửa</a> |
+            <a href="/invoices/<%= invoice._id %>/delete" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</a>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>  
+</body>
+</html>
